@@ -1,0 +1,16 @@
+<!--index.wxml-->
+
+<view class="card container bg-blue rounded-lb-2em rounded-rb-2em shadow-lg">
+  <text class="text-white bold f-24rpx drop-shadow px-5 py-2"> Do Your Want Do</text>
+</view>
+<view class="container bg-gray relative -top-2em -z-1 rounded-lb-2em rounded-rb-2em">
+  <text class="text-white bold f-24rpx drop-shadow px-5 py-2">Hello Unocss</text>
+  <text class="text-white bold f-24rpx drop-shadow px-5 py-2">Hello Mini</text>
+</view>
+<view class="text-center animate-swing">
+  <button class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700 border-none cursor-pointer" bind:tap="bindViewTap"
+  hover-class="bg-green-700"
+  >
+    Click me
+  </button>
+</view>

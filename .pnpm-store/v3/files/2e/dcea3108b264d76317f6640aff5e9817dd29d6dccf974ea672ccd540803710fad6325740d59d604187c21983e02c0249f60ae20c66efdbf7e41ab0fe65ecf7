@@ -1,0 +1,89 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const core = require('@unocss/core');
+require('./chunks/decoration.cjs');
+const colors$1 = require('./chunks/colors.cjs');
+const _default$1 = require('./chunks/default.cjs');
+const colors = require('./chunks/colors2.cjs');
+const _default = require('./chunks/default2.cjs');
+const _default$2 = require('./chunks/default3.cjs');
+require('./chunks/variants.cjs');
+
+const wxPrefix = "page";
+const taroPrefix = "*";
+const uniappPrefix = "uni-page-body";
+function preflights(isH5, platform) {
+  return [
+    {
+      layer: "preflights",
+      getCSS(ctx) {
+        if (ctx.theme.preflightBase) {
+          const css = core.entriesToCss(Object.entries(ctx.theme.preflightBase));
+          const preflights = `,::before,::after{${css}}::backdrop{${css}}`;
+          if (isH5)
+            return `${platform === "uniapp" ? uniappPrefix : taroPrefix}${preflights}`;
+          else
+            return `${wxPrefix}${preflights}`;
+        }
+      }
+    }
+  ];
+}
+
+const rpxRE = /^-?[\.\d]+rpx$/;
+function taroRpxTransform(size, designWidth) {
+  return `${Math.ceil(parseInt(size, 10) / 40 * 640 / designWidth * 1e5) / 1e5}rem`;
+}
+function uniAppRpxTransform(size) {
+  return `%?${size}?%`;
+}
+const presetWeapp = (options = {}) => {
+  options.dark = options.dark ?? "class";
+  options.attributifyPseudo = options.attributifyPseudo ?? false;
+  options.transform = options.transform ?? true;
+  options.isH5 = options.isH5 ?? false;
+  options.designWidth = options.designWidth ?? 750;
+  options.platform = options.platform ?? "uniapp";
+  return {
+    name: "unocss-preset-weapp",
+    theme: _default.theme,
+    rules: _default$1.rules,
+    variants: _default$2.variants(options),
+    options,
+    postprocess(css) {
+      if (options.transform) {
+        css.selector = colors$1.transformSelector(css.selector);
+      }
+      if (options.variablePrefix && options.variablePrefix !== "un-")
+        VarPrefixPostprocessor(options.variablePrefix, css);
+      if (options.isH5) {
+        css.entries.forEach((i) => {
+          const value = i[1];
+          if (value && typeof value === "string" && rpxRE.test(value)) {
+            if (options.platform === "taro")
+              i[1] = `${taroRpxTransform(value.slice(0, -3), options.designWidth)}`;
+            else
+              i[1] = `${uniAppRpxTransform(value.slice(0, -3))}`;
+          }
+        });
+      }
+    },
+    preflights: preflights(options.isH5, options.platform),
+    prefix: options.prefix
+  };
+};
+function VarPrefixPostprocessor(prefix, obj) {
+  obj.entries.forEach((i) => {
+    i[0] = i[0].replace(/^--un-/, `--${prefix}`);
+    if (typeof i[1] === "string")
+      i[1] = i[1].replace(/var\(--un-/g, `var(--${prefix}`);
+  });
+}
+
+exports.parseColor = colors$1.parseColor;
+exports.colors = colors.colors;
+exports.theme = _default.theme;
+exports["default"] = presetWeapp;
+exports.presetWeapp = presetWeapp;

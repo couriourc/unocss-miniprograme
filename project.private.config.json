@@ -1,0 +1,23 @@
+{
+    "condition": {
+        "plugin": {
+            "list": []
+        },
+        "game": {
+            "list": []
+        },
+        "gamePlugin": {
+            "list": []
+        },
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "启动日志",
+                    "pathName": "pages/logs/logs",
+                    "query": "",
+                    "scene": null
+                }
+            ]
+        }
+    }
+}

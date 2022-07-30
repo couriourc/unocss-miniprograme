@@ -1,0 +1,5 @@
+import { T as Theme } from './types-e01f4bb8.js';
+
+declare const theme: Theme;
+
+export { theme as t };

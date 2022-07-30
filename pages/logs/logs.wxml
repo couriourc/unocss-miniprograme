@@ -1,0 +1,6 @@
+<!--logs.wxml-->
+<view class="flex flex-col text-center  text-gray bg-gray-100">
+  <block wx:for="{{logs}}" wx:key="timeStamp" wx:for-item="log">
+    <text class="drop-shadow bold py-2 hover:text-black duration-1000">{{index + 1}}. {{log.date}}</text>
+  </block>
+</view>

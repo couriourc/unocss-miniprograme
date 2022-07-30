@@ -1,0 +1,29 @@
+import { c as createCDNLoader, l as loadIcon } from './chunks/cdn.mjs';
+import { createPresetIcons } from './core.mjs';
+export { createPresetIcons } from './core.mjs';
+import 'ohmyfetch';
+import '@unocss/core';
+
+const isNode = typeof process < "u" && typeof process.stdout < "u" && !process.versions.deno;
+const isVSCode = isNode && !!process.env.VSCODE_CWD;
+
+const presetIcons = createPresetIcons(async (options) => {
+  const {
+    cdn
+  } = options;
+  if (cdn)
+    return createCDNLoader(cdn);
+  if (isNode && !isVSCode) {
+    try {
+      return await import('@iconify/utils/lib/loader/node-loader').then((i) => i?.loadNodeIcon);
+    } catch {
+    }
+    try {
+      return require("@iconify/utils/lib/loader/node-loader.cjs");
+    } catch {
+    }
+  }
+  return loadIcon;
+});
+
+export { presetIcons as default, presetIcons };

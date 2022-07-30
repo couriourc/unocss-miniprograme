@@ -1,0 +1,300 @@
+'use strict';
+
+const colors = require('./colors2.cjs');
+const decoration = require('./decoration.cjs');
+require('./colors.cjs');
+require('@unocss/core');
+
+const fontFamily = {
+  sans: [
+    "ui-sans-serif",
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    '"Noto Sans"',
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+    '"Noto Color Emoji"'
+  ].join(","),
+  serif: [
+    "ui-serif",
+    "Georgia",
+    "Cambria",
+    '"Times New Roman"',
+    "Times",
+    "serif"
+  ].join(","),
+  mono: [
+    "ui-monospace",
+    "SFMono-Regular",
+    "Menlo",
+    "Monaco",
+    "Consolas",
+    '"Liberation Mono"',
+    '"Courier New"',
+    "monospace"
+  ].join(",")
+};
+const fontSize = {
+  "xs": ["24rpx", "32rpx"],
+  "sm": ["28rpx", "40rpx"],
+  "base": ["32rpx", "48rpx"],
+  "lg": ["36rpx", "56rpx"],
+  "xl": ["40rpx", "56rpx"],
+  "2xl": ["48rpx", "64rpx"],
+  "3xl": ["60rpx", "72rpx"],
+  "4xl": ["72rpx", "80rpx"],
+  "5xl": ["96rpx", "1"],
+  "6xl": ["120rpx", "1"],
+  "7xl": ["144rpx", "1"],
+  "8xl": ["192rpx", "1"],
+  "9xl": ["256rpx", "1"]
+};
+const textIndent = {
+  "DEFAULT": "48rpx",
+  "xs": "16rpx",
+  "sm": "32rpx",
+  "md": "48rpx",
+  "lg": "64rpx",
+  "xl": "80rpx",
+  "2xl": "96rpx",
+  "3xl": "128rpx"
+};
+const textStrokeWidth = {
+  DEFAULT: "48rpx",
+  none: "0",
+  sm: "thin",
+  md: "medium",
+  lg: "thick"
+};
+const textShadow = {
+  DEFAULT: ["0 0 2rpx rgba(0,0,0,0.2)", "0 0 2rpx rgba(1,0,5,0.1)"],
+  none: "0 0 rgba(0,0,0,0)",
+  sm: "2rpx 2rpx 6rpx rgba(36,37,47,0.25)",
+  md: ["0 2rpx 4rpx rgba(30,29,39,0.19)", "2rpx 4rpx 8rpx rgba(54,64,147,0.18)"],
+  lg: ["6rpx 6rpx 12rpx rgba(0,0,0,0.26)", "0 0 10rpx rgba(15,3,86,0.22)"],
+  xl: ["2rpx 2rpx 6rpx rgba(0,0,0,0.29)", "4rpx 8rpx 14rpx rgba(73,64,125,0.35)"]
+};
+const lineHeight = {
+  none: "1",
+  tight: "1.25",
+  snug: "1.375",
+  normal: "1.5",
+  relaxed: "1.625",
+  loose: "2"
+};
+const letterSpacing = {
+  tighter: "-0.05em",
+  tight: "-0.025em",
+  normal: "0em",
+  wide: "0.025em",
+  wider: "0.05em",
+  widest: "0.1em"
+};
+const wordSpacing = letterSpacing;
+
+const breakpoints = {
+  "sm": "640px",
+  "md": "768px",
+  "lg": "1024px",
+  "xl": "1280px",
+  "2xl": "1536px"
+};
+const verticalBreakpoints = { ...breakpoints };
+const lineWidth = {
+  DEFAULT: "1px",
+  none: "0px"
+};
+const spacing = {
+  "DEFAULT": "32rpx",
+  "none": "0",
+  "xs": "24rpx",
+  "sm": "28rpx",
+  "md": "36rpx",
+  "lg": "40rpx",
+  "xl": "48rpx",
+  "2xl": "60rpx",
+  "3xl": "72rpx",
+  "4xl": "96rpx",
+  "5xl": "120rpx",
+  "6xl": "144rpx",
+  "7xl": "192rpx",
+  "8xl": "256rpx"
+};
+const duration = {
+  DEFAULT: "150ms",
+  none: "0ms",
+  75: "75ms",
+  100: "100ms",
+  150: "150ms",
+  200: "200ms",
+  300: "300ms",
+  500: "500ms",
+  700: "700ms",
+  1e3: "1000ms"
+};
+const borderRadius = {
+  "DEFAULT": "8rpx",
+  "none": "0",
+  "sm": "4rpx",
+  "md": "12rpx",
+  "lg": "16rpx",
+  "xl": "24rpx",
+  "2xl": "32rpx",
+  "3xl": "48rpx",
+  "full": "9999px"
+};
+const boxShadow = {
+  "DEFAULT": ["var(--un-shadow-inset) 0 1px 3px 0 rgba(0,0,0,0.1)", "var(--un-shadow-inset) 0 1px 2px -1px rgba(0,0,0,0.1)"],
+  "none": "0 0 rgba(0,0,0,0)",
+  "sm": "var(--un-shadow-inset) 0 1px 2px 0 rgba(0,0,0,0.05)",
+  "md": ["var(--un-shadow-inset) 0 4px 6px -1px rgba(0,0,0,0.1)", "var(--un-shadow-inset) 0 2px 4px -2px rgba(0,0,0,0.1)"],
+  "lg": ["var(--un-shadow-inset) 0 10px 15px -3px rgba(0,0,0,0.1)", "var(--un-shadow-inset) 0 4px 6px -4px rgba(0,0,0,0.1)"],
+  "xl": ["var(--un-shadow-inset) 0 20px 25px -5px rgba(0,0,0,0.1)", "var(--un-shadow-inset) 0 8px 10px -6px rgba(0,0,0,0.1)"],
+  "2xl": "var(--un-shadow-inset) 0 25px 50px -12px rgba(0,0,0,0.25)",
+  "inner": "inset 0 2px 4px 0 rgba(0,0,0,0.05)"
+};
+const easing = {
+  "DEFAULT": "cubic-bezier(0.4, 0, 0.2, 1)",
+  "linear": "linear",
+  "in": "cubic-bezier(0.4, 0, 1, 1)",
+  "out": "cubic-bezier(0, 0, 0.2, 1)",
+  "in-out": "cubic-bezier(0.4, 0, 0.2, 1)"
+};
+const ringWidth = {
+  DEFAULT: "1px",
+  none: "0px"
+};
+
+const blur = {
+  "DEFAULT": "16rpx",
+  "0": "0",
+  "sm": "8rpx",
+  "md": "24rpx",
+  "lg": "32rpx",
+  "xl": "48rpx",
+  "2xl": "80rpx",
+  "3xl": "128rpx"
+};
+const dropShadow = {
+  "DEFAULT": ["0 2rpx 4rpx rgba(0,0,0,0.1)", "0 2rpx 2rpx rgba(0,0,0,0.06)"],
+  "sm": "0 2rpx 2rpx rgba(0,0,0,0.05)",
+  "md": ["0 8rpx 6rpx rgba(0,0,0,0.07)", "0 4rpx 4rpx rgba(0,0,0,0.06)"],
+  "lg": ["0 20rpx 16rpx rgba(0,0,0,0.04)", "0 8rpx 6rpx rgba(0,0,0,0.1)"],
+  "xl": ["0 40rpx 26rpx rgba(0,0,0,0.03)", "0 16rpx 10rpx rgba(0,0,0,0.08)"],
+  "2xl": "0 50rpx 50rpx rgba(0,0,0,0.15)",
+  "none": "0 0 rgba(0,0,0,0)"
+};
+
+const baseSize = {
+  "xs": "180rpx",
+  "sm": "220rpx",
+  "md": "260rpx",
+  "lg": "300rpx",
+  "xl": "340rpx",
+  "2xl": "390rpx",
+  "3xl": "440rpx",
+  "4xl": "490rpx",
+  "5xl": "540rpx",
+  "6xl": "590rpx",
+  "7xl": "640rpx",
+  "8xl": "690rpx",
+  "9xl": "740rpx",
+  "full": "100%",
+  "half": "50%"
+};
+const width = {
+  auto: "auto",
+  ...baseSize,
+  screen: "100vw"
+};
+const maxWidth = {
+  none: "none",
+  ...baseSize,
+  screen: "100vw"
+};
+const height = {
+  auto: "auto",
+  ...baseSize,
+  screen: "100vh"
+};
+const maxHeight = {
+  none: "none",
+  ...baseSize,
+  screen: "100vh"
+};
+
+const preflightBase = {
+  ...decoration.transformBase,
+  ...decoration.boxShadowsBase,
+  ...decoration.ringBase
+};
+
+const theme = {
+  width,
+  height,
+  maxWidth,
+  maxHeight,
+  minWidth: maxWidth,
+  minHeight: maxHeight,
+  inlineSize: width,
+  blockSize: height,
+  maxInlineSize: maxWidth,
+  maxBlockSize: maxHeight,
+  minInlineSize: maxWidth,
+  minBlockSize: maxHeight,
+  colors: colors.colors,
+  fontFamily,
+  fontSize,
+  breakpoints,
+  verticalBreakpoints,
+  borderRadius,
+  lineHeight,
+  letterSpacing,
+  wordSpacing,
+  boxShadow,
+  textIndent,
+  textShadow,
+  textStrokeWidth,
+  blur,
+  dropShadow,
+  easing,
+  lineWidth,
+  spacing,
+  duration,
+  ringWidth,
+  preflightBase
+};
+
+exports.baseSize = baseSize;
+exports.blur = blur;
+exports.borderRadius = borderRadius;
+exports.boxShadow = boxShadow;
+exports.breakpoints = breakpoints;
+exports.dropShadow = dropShadow;
+exports.duration = duration;
+exports.easing = easing;
+exports.fontFamily = fontFamily;
+exports.fontSize = fontSize;
+exports.height = height;
+exports.letterSpacing = letterSpacing;
+exports.lineHeight = lineHeight;
+exports.lineWidth = lineWidth;
+exports.maxHeight = maxHeight;
+exports.maxWidth = maxWidth;
+exports.preflightBase = preflightBase;
+exports.ringWidth = ringWidth;
+exports.spacing = spacing;
+exports.textIndent = textIndent;
+exports.textShadow = textShadow;
+exports.textStrokeWidth = textStrokeWidth;
+exports.theme = theme;
+exports.verticalBreakpoints = verticalBreakpoints;
+exports.width = width;
+exports.wordSpacing = wordSpacing;
